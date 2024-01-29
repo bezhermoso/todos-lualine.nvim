@@ -88,8 +88,7 @@ M.build_output_str_from_search_results = function(todos, cfg)
   local segments = {}
   for k, count in pairs(cnt_table) do
     if count > 0 then
-      local glyph = cfg.keywords[k].icon or (k .. ": ")
-      local s = glyph .. count
+      local s = create_segment(k, cfg.keywords[k], count)
       table.insert(segments, s)
     end
   end
