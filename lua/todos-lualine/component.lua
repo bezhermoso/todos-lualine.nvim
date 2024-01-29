@@ -8,14 +8,16 @@ end
 
 ---@class ComponentConfig
 local ComponentConfig = {
-  glyphs = {
-    TODO = { icon = "󰄬", enabled = true },
-    FIX = { icon = "", enabled = true, alt = {"FIXME", "BUG", "FIXIT", "ISSUE"} },
-    HACK = { icon = "󰈸", enabled = false },
-    WARN = { icon = "", enabled = false, alt = {"WARNING"}, },
-    NOTE = { icon = "󰎚", enabled = false, alt = {"INFO"}, },
-    TEST = { icon = "", enabled = false, alt = {"TESTING", "PASSED", "FAILED"} },
+  keywords = {
+    TODO = { icon = " " },
+    FIX = { icon = " ", alt = {"FIXME", "BUG", "FIXIT", "ISSUE"} },
+    HACK = { icon =  " " },
+    WARN = { icon = "", alt = {"WARNING"}, },
+    PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
+    NOTE = { icon = " ", alt = {"INFO"}, },
+    TEST = { icon =  "⏲ ", alt = {"TESTING", "PASSED", "FAILED"} },
   },
+  order = { "TODO", "FIX" },
   when_empty = "",
 }
 
@@ -27,17 +29,21 @@ local function build_search_args(cfg)
     keywords = "",
   }
   local keywords = {}
-  for k, v in pairs(cfg.glyphs) do
-    if v.enabled then
-      table.insert(keywords, k)
-      for _, alt in ipairs(v.alt or {}) do
+  for _, type in ipairs(cfg.order) do
+    local kw = cfg.keywords[type]
+    if kw ~= nil then
+      table.insert(keywords, type)
+      -- Some keywords have alternatives e.g. FIXME. Add those as well.
+      for _, alt in ipairs(kw.alt or {}) do
         table.insert(keywords, alt)
       end
+    else
+      vim.notify("Keyword in component order " .. type .. " is not a known keyword.", vim.log.levels.ERROR)
+      return args, false
     end
   end
 
   args.keywords = table.concat(keywords, ",")
-  vim.print(args)
 
   if args.keywords == "" then
     return args, false
@@ -50,12 +56,17 @@ end
 ---@return table
 local function build_count_table(cfg)
   local cnt_table = {}
-  for k, v in pairs(cfg.glyphs) do
-    if v.enabled then
-      cnt_table[k] = 0
-    end
+  -- TODO: Validate ComponentConfig.order to contain only defined keywords.
+  for _, v in ipairs(cfg.order) do
+    cnt_table[v] = 0
   end
   return cnt_table
+end
+
+local function create_segment(type, keywords_entry, count)
+  local glyph = keywords_entry.icon or (type .. ": ")
+  local s = glyph .. count
+  return s
 end
 
 ---@param cfg ComponentConfig
@@ -77,13 +88,15 @@ M.build_output_str_from_search_results = function(todos, cfg)
   local segments = {}
   for k, count in pairs(cnt_table) do
     if count > 0 then
-      local glyph = cfg.glyphs[k].icon or (k .. ":")
-      local s = glyph .. " " .. count
+      local glyph = cfg.keywords[k].icon or (k .. ": ")
+      local s = glyph .. count
       table.insert(segments, s)
     end
   end
-  return table.concat(segments, " ") or cfg.when_empty or ""
+  return table.concat(segments, " ") or cfg.when_empty or ComponentConfig.when_empty
 end
+
+local err_func = function() return "ERR!" end
 
 ---@param opts ComponentConfig
 ---@return function
@@ -91,12 +104,17 @@ M.component = function(opts)
   local cfg = ComponentConfig
   cfg = vim.tbl_deep_extend("force", cfg, opts or {})
 
+  if #(cfg.order or {}) == 0 then
+    vim.notify("todo-comments lualine order cannot be empty.", vim.log.levels.ERROR)
+    return err_func
+  end
+
   local started = false
   local output_str = ""
 
   local search_args, ok = build_search_args(cfg)
   if not ok then
-    return function() return "..." end
+    return err_func
   end
 
   -- This function will evaluated by Lualine at a set interval.
