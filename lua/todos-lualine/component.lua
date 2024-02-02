@@ -118,6 +118,11 @@ M.component = function(opts)
 
   -- This function will evaluated by Lualine at a set interval.
   return function()
+    local config = require("todo-comments.config")
+    if not config.loaded then
+      return "..."
+    end
+
     -- If started = true, it means search has started but the callback haven't received the results yet.
     if not started then
       started = true
