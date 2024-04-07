@@ -46,13 +46,13 @@ local config = {
     TODO = { icon = " " },
     FIX = { icon = " ", alt = {"FIXME", "BUG", "FIXIT", "ISSUE"} },
     HACK = { icon =  " " },
-    WARN = { icon = "", alt = {"WARNING"}, },
+    WARN = { icon = "", alt = {"WARNING"} },
     PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-    NOTE = { icon = " ", alt = {"INFO"}, },
+    NOTE = { icon = " ", alt = {"INFO"} },
     TEST = { icon =  "⏲ ", alt = {"TESTING", "PASSED", "FAILED"} },
   },
   when_empty = "",
 }
 
-local todos_comment = rquire("todos-lualine").component(config)
+ocal todos_comment = rquire("todos-lualine").component(config)
 ```
