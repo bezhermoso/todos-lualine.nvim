@@ -12,9 +12,9 @@ local ComponentConfig = {
     TODO = { icon = " " },
     FIX = { icon = " ", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
     HACK = { icon = " " },
-    WARN = { icon = "", alt = { "WARNING" }, },
+    WARN = { icon = "", alt = { "WARNING" } },
     PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-    NOTE = { icon = " ", alt = { "INFO" }, },
+    NOTE = { icon = " ", alt = { "INFO" } },
     TEST = { icon = "⏲ ", alt = { "TESTING", "PASSED", "FAILED" } },
   },
   order = { "TODO", "FIX" },
@@ -95,7 +95,9 @@ M.build_output_str_from_search_results = function(todos, cfg)
   return table.concat(segments, " ") or cfg.when_empty or ComponentConfig.when_empty
 end
 
-local err_func = function() return "ERR!" end
+local err_func = function()
+  return "ERR!"
+end
 
 ---@param opts ComponentConfig
 ---@return function
