@@ -10,12 +10,12 @@ end
 local ComponentConfig = {
   keywords = {
     TODO = { icon = " " },
-    FIX = { icon = " ", alt = {"FIXME", "BUG", "FIXIT", "ISSUE"} },
-    HACK = { icon =  " " },
-    WARN = { icon = "", alt = {"WARNING"}, },
+    FIX = { icon = " ", alt = { "FIXME", "BUG", "FIXIT", "ISSUE" } },
+    HACK = { icon = " " },
+    WARN = { icon = "", alt = { "WARNING" }, },
     PERF = { icon = " ", alt = { "OPTIM", "PERFORMANCE", "OPTIMIZE" } },
-    NOTE = { icon = " ", alt = {"INFO"}, },
-    TEST = { icon =  "⏲ ", alt = {"TESTING", "PASSED", "FAILED"} },
+    NOTE = { icon = " ", alt = { "INFO" }, },
+    TEST = { icon = "⏲ ", alt = { "TESTING", "PASSED", "FAILED" } },
   },
   order = { "TODO", "FIX" },
   when_empty = "",
@@ -126,7 +126,7 @@ M.component = function(opts)
     -- If started = true, it means search has started but the callback haven't received the results yet.
     if not started then
       started = true
-      require("todo-comments.search").search(function (todos)
+      require("todo-comments.search").search(function(todos)
         -- Assign output_str for Lualine output, and mark started = false so
         -- next component eval triggers the search again.
         output_str = M.build_output_str_from_search_results(todos, cfg)
