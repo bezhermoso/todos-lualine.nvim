@@ -9,7 +9,7 @@ See the number of TODOs, HACKs, WARNs, NOTEs, etc. in your current workspace at 
 
 Via [`lazy.nvim`](https://github.com/folke/lazy.nvim):
 
-Define this plugin as a dependency to `lualine.nvim`:
+Define this plugin as a dependency of `lualine.nvim`:
 
 ```lua
 {
