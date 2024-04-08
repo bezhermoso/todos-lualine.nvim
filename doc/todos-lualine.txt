@@ -1,4 +1,4 @@
-*todos-lualine.txt*       For Neovim >= 0.8.0       Last change: 2024 April 07
+*todos-lualine.txt*       For Neovim >= 0.8.0       Last change: 2024 April 08
 
 ==============================================================================
 Table of Contents                            *todos-lualine-table-of-contents*
@@ -22,7 +22,7 @@ INSTALLATION & CONFIGURATION*todos-lualine-todos-lualine.nvim-installation-&-con
 
 Via `lazy.nvim` <https://github.com/folke/lazy.nvim>
 
-Definethis plugin as a dependency to `lualine.nvim`
+Definethis plugin as a dependency of `lualine.nvim`
 
 >lua
     {
