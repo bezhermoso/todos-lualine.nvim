@@ -19,6 +19,7 @@ local ComponentConfig = {
   },
   order = { "TODO", "FIX" },
   when_empty = "",
+  cwd = "",
 }
 
 ---@param cfg ComponentConfig
@@ -128,6 +129,12 @@ M.component = function(opts)
     -- If started = true, it means search has started but the callback haven't received the results yet.
     if not started then
       started = true
+
+      -- Recalculate cfg.cwd on every "tick" to support file-local component configuration
+      if cfg.cwd ~= nil and cfg.cwd ~= "" then
+        search_args.cwd = vim.fn.expand(cfg.cwd)
+      end
+
       require("todo-comments.search").search(function(todos)
         -- Assign output_str for Lualine output, and mark started = false so
         -- next component eval triggers the search again.
