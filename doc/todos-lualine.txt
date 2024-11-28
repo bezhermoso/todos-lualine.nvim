@@ -67,9 +67,14 @@ object of this form:
         TEST = { icon =  "⏲ ", alt = {"TESTING", "PASSED", "FAILED"} },
       },
       when_empty = "",
+        -- Path to count TODOs. Expanded via vim.fn.expand e.g.
+        -- cwd = "%" will count only TODOs on current file
+        -- cwd = "%:h" will count only TODOs within directory of current file
+        -- when empty, will count TODOs in vim.fn.getcwd() (Default)
+      cwd = "",
     }
     
-    ocal todos_comment = rquire("todos-lualine").component(config)
+    local todos_comment = rquire("todos-lualine").component(config)
 <
 
 ==============================================================================
